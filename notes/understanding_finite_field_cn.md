@@ -164,5 +164,54 @@ ECDSA
 
 #### (拓展)欧几里得算法
 
+1. 迭代
+
+``` 
+function egcd(a, b)
+    s := 0;    old_s := 1
+    t := 1;    old_t := 0
+    r := b;    old_r := a
+    
+    while r ≠ 0 do
+        quotient := old_r div r
+        (old_r, r) := (r, old_r − quotient × r)
+        (old_s, s) := (s, old_s − quotient × s)
+        (old_t, t) := (t, old_t − quotient × t)
+    
+    output "Bézout coefficients:", (old_s, old_t)
+    output "greatest common divisor:", old_r
+    output "quotients by the gcd:", (t, s)
+```
+
+2. 递归
+
+``` 
+function egcd_recursive(a,b)
+    if b = 0 do
+        (a, 1, 0)
+    else
+        quotient = a/b;
+        rem = a%b;
+        r = egcd_recursive(b,rem);
+        (r[0],r[2],r[1]-r[2]*quotient)
+
+    (gcd, x, y) = egcd_recursive(a,b)
+    output "Bézout coefficients:", (x, y)
+    output "greatest common divisor:" gcd
+```
+
+一点分析：这里不是尾递归，r[0]就是gcd，从最深的栈到返回都不变，整个过程会构造出x, y系数来。
+当递归调用了4次结束，参考迭代调用算法:
+
+``` 
+s_0 = 1
+s_1 = 0
+s_2 = s_0 - s_1 * q_1
+s_3 = s_1 - s_2 * q_2
+s_4 = s_2 - s_3 * q_3
+```
+
+todo 
+
 #### stein算法
 
